@@ -1,12 +1,13 @@
 # Copié sur le VPS par le workflow GitHub Actions (dans $DEPLOY_PATH).
-# IMAGE est fourni par le workflow, ex. ghcr.io/<owner>/portfolio-konan:<sha>
+# IMAGE et APP_PORT sont écrits dans .env par le workflow,
+# ex. IMAGE=docker.io/<user>/portfolio-konan:<sha>
 services:
   portfolio:
-    image: ${IMAGE:-ghcr.io/owner/portfolio-konan:latest}
+    image: ${IMAGE:-docker.io/owner/portfolio-konan:latest}
     container_name: portfolio-konan
     restart: unless-stopped
     environment:
       NODE_ENV: production
     # Exposé uniquement en local : Nginx ou Traefik fait le reverse proxy + HTTPS
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:${APP_PORT:-3898}:3000"
