@@ -7,6 +7,32 @@ export const profile = {
   phone: "+225 01 41 82 29 18",
   phoneHref: "tel:+2250141822918",
   website: "https://abrahamkonany.com",
+  socials: {
+    linkedin: "https://www.linkedin.com/in/konan-abraham-kouame01/",
+    facebook: "https://www.facebook.com/konany/",
+  },
+};
+
+export const seo = {
+  title: "Abraham Konan — Développeur Backend Node.js / NestJS à Abidjan, Côte d'Ivoire",
+  shortTitle: "Abraham Konan — Développeur Backend en Côte d'Ivoire",
+  description:
+    "Abraham Konan Kouamé, développeur backend Node.js, NestJS et TypeScript basé à Abidjan, Côte d'Ivoire. APIs REST, paiements Mobile Money (Orange, MTN, Wave, Moov), Stripe, Docker, Kubernetes et CI/CD.",
+  keywords: [
+    "développeur backend Côte d'Ivoire",
+    "développeur backend Abidjan",
+    "développeur Node.js Abidjan",
+    "développeur NestJS Côte d'Ivoire",
+    "développeur TypeScript Abidjan",
+    "développeur web Côte d'Ivoire",
+    "freelance backend Abidjan",
+    "intégration Mobile Money",
+    "intégration Orange Money MTN Money Wave",
+    "API REST Côte d'Ivoire",
+    "DevOps Docker Kubernetes Abidjan",
+    "Abraham Konan",
+    "Abraham Konan Kouamé",
+  ],
 };
 
 export const stats = [

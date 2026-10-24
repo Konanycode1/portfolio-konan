@@ -2,6 +2,7 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { SocialLinks } from "@/components/social-links";
 import { profile } from "@/lib/data";
 
 export function Contact() {
@@ -17,7 +18,8 @@ export function Contact() {
           &nbsp;?
         </h2>
         <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-          Je suis ouvert aux postes backend et aux missions où la fiabilité compte. Écrivez-moi.
+          Basé à Abidjan, je suis ouvert aux postes de développeur backend et aux missions
+          freelance, en Côte d&apos;Ivoire comme à distance. Écrivez-moi.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild size="lg" className="h-11 px-5">
@@ -32,13 +34,20 @@ export function Contact() {
               {profile.phone}
             </a>
           </Button>
+          <Button asChild size="lg" variant="outline" className="h-11 px-5">
+            <a href={profile.socials.linkedin} target="_blank" rel="me noopener noreferrer">
+              LinkedIn
+              <ArrowUpRight data-icon="inline-end" />
+            </a>
+          </Button>
         </div>
 
         <Separator className="mt-24 mb-8" />
         <footer className="flex flex-col gap-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © 2026 {profile.name}
-          </p>
+          <div className="flex items-center gap-4">
+            <p>© 2026 {profile.name} · Développeur backend à Abidjan</p>
+            <SocialLinks className="-my-2" />
+          </div>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="size-3.5" /> {profile.location}

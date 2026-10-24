@@ -1,3 +1,4 @@
+import { SocialLinks } from "@/components/social-links";
 import { Button } from "@/components/ui/button";
 import { profile } from "@/lib/data";
 
@@ -29,9 +30,12 @@ export function Header() {
             </a>
           ))}
         </nav>
-        <Button asChild size="sm">
-          <a href="#contact">Me contacter</a>
-        </Button>
+        <div className="flex items-center gap-2">
+          <SocialLinks className="hidden sm:flex" />
+          <Button asChild size="sm">
+            <a href="#contact">Me contacter</a>
+          </Button>
+        </div>
       </div>
     </header>
   );

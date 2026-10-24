@@ -66,14 +66,17 @@ export function Hero() {
             </span>
             Ouvert aux nouvelles opportunités
           </p>
-          <h1 className="text-4xl leading-[1.05] font-medium tracking-tight text-balance sm:text-6xl">
+          <h1 className="mb-5 font-mono text-xs tracking-wider text-muted-foreground uppercase sm:text-sm">
+            {profile.shortName} · {profile.role} à Abidjan, Côte d&apos;Ivoire
+          </h1>
+          <p className="text-4xl leading-[1.05] font-medium tracking-tight text-balance sm:text-6xl">
             Je conçois des backends qui{" "}
             <span className="font-serif text-primary italic">tiennent la charge</span>.
-          </h1>
+          </p>
           <p className="mt-6 max-w-xl text-lg text-pretty text-muted-foreground">
-            {profile.role} Node.js · NestJS · TypeScript. APIs, paiements, files de
-            traitement et infrastructure Kubernetes pour des plateformes en production,
-            depuis {profile.location.split(",")[0]}.
+            Développeur backend Node.js, NestJS et TypeScript. APIs REST, paiements Mobile
+            Money et Stripe, files de traitement et infrastructure Kubernetes pour des
+            plateformes en production, en Côte d&apos;Ivoire et à l&apos;international.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg" className="h-11 px-5">
