@@ -18,7 +18,7 @@ env:
   DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || secrets.DOCKERHUB_USERNAME }}
   APP_PORT: 3898
   # Réseau Docker du conteneur Nginx (variable ou secret PROXY_NETWORK)
-  PROXY_NETWORK: ${{ vars.PROXY_NETWORK || secrets.PROXY_NETWORK || 'proxy' }}
+  PROXY_NETWORK: ${{ vars.PROXY_NETWORK || secrets.PROXY_NETWORK || 'networkings' }}
 
 jobs:
   ci:

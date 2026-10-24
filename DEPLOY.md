@@ -90,7 +90,7 @@ docker ps --format '{{.Names}}' | grep -i nginx
 docker inspect <conteneur-nginx> -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}'
 ```
 
-Si ce n'est pas `proxy`, créer dans GitHub une variable (ou un secret) **`PROXY_NETWORK`** avec ce nom. Le workflow l'écrit dans `.env` et `docker-compose.yml` branche le portfolio dessus.
+Le réseau du serveur est `networkings` (valeur par défaut du workflow). S'il change, créer dans GitHub une variable (ou un secret) **`PROXY_NETWORK`** avec ce nom. Le workflow l'écrit dans `.env` et `docker-compose.yml` branche le portfolio dessus.
 
 **b. Config Nginx** (dans le dossier de conf de ton conteneur Nginx)
 
