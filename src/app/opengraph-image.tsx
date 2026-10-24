@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Abraham Konan — Développeur Backend Node.js / NestJS à Abidjan, Côte d'Ivoire";
+export const alt = "Abraham Konan Kouamé — Développeur Backend Node.js / NestJS à Abidjan, Côte d'Ivoire";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -46,7 +46,7 @@ export default function Image() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div style={{ fontSize: 84, fontWeight: 600, letterSpacing: -2, lineHeight: 1 }}>
-            Abraham Konan
+            Abraham Konan Kouamé
           </div>
           <div style={{ fontSize: 48, color: amber }}>Développeur Backend</div>
           <div style={{ fontSize: 30, opacity: 0.7 }}>

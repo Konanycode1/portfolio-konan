@@ -67,7 +67,7 @@ export function Hero() {
             Ouvert aux nouvelles opportunités
           </p>
           <h1 className="mb-5 font-mono text-xs tracking-wider text-muted-foreground uppercase sm:text-sm">
-            {profile.shortName} · {profile.role} à Abidjan, Côte d&apos;Ivoire
+            {profile.name} · {profile.role} à Abidjan, Côte d&apos;Ivoire
           </h1>
           <p className="text-4xl leading-[1.05] font-medium tracking-tight text-balance sm:text-6xl">
             Je conçois des backends qui{" "}

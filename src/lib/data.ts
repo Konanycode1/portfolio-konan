@@ -1,6 +1,8 @@
 export const profile = {
   name: "Abraham Konan Kouamé",
   shortName: "Abraham Konan",
+  // Ordres dans lesquels le nom est recherché (avec et sans accent)
+  nameVariants: ["Abraham Konan Kouamé", "Kouamé Konan Abraham", "Konan Abraham Kouamé", "Abraham Konan Kouame", "Kouame Konan Abraham", "Konan Abraham Kouame", "Abraham Konan", "Konan Abraham"],
   role: "Développeur Backend",
   location: "Abidjan, Côte d'Ivoire",
   email: "abrahamkonany@gmail.com",
@@ -14,10 +16,10 @@ export const profile = {
 };
 
 export const seo = {
-  title: "Abraham Konan — Développeur Backend Node.js / NestJS à Abidjan, Côte d'Ivoire",
-  shortTitle: "Abraham Konan — Développeur Backend en Côte d'Ivoire",
+  title: "Abraham Konan Kouamé — Développeur Backend Node.js / NestJS à Abidjan, Côte d'Ivoire",
+  shortTitle: "Abraham Konan Kouamé — Développeur Backend en Côte d'Ivoire",
   description:
-    "Abraham Konan Kouamé, développeur backend Node.js, NestJS et TypeScript basé à Abidjan, Côte d'Ivoire. APIs REST, paiements Mobile Money (Orange, MTN, Wave, Moov), Stripe, Docker, Kubernetes et CI/CD.",
+    "Abraham Konan Kouamé (Kouamé Konan Abraham), développeur backend Node.js, NestJS et TypeScript basé à Abidjan, Côte d'Ivoire. APIs REST, paiements Mobile Money (Orange, MTN, Wave, Moov), Stripe, Docker, Kubernetes et CI/CD.",
   keywords: [
     "développeur backend Côte d'Ivoire",
     "développeur backend Abidjan",
@@ -32,6 +34,11 @@ export const seo = {
     "DevOps Docker Kubernetes Abidjan",
     "Abraham Konan",
     "Abraham Konan Kouamé",
+    "Kouamé Konan Abraham",
+    "Konan Abraham Kouamé",
+    "Abraham Konan Kouame",
+    "Kouame Konan Abraham",
+    "Konan Abraham Kouame",
   ],
 };
 

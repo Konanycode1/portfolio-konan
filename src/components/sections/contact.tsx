@@ -45,7 +45,11 @@ export function Contact() {
         <Separator className="mt-24 mb-8" />
         <footer className="flex flex-col gap-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <p>© 2026 {profile.name} · Développeur backend à Abidjan</p>
+            <p>
+              © 2026 {profile.name}
+              <span className="text-border"> · </span>
+              Kouamé Konan Abraham · Développeur backend à Abidjan
+            </p>
             <SocialLinks className="-my-2" />
           </div>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
