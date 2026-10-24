@@ -1,5 +1,5 @@
 # Copié sur le VPS par le workflow GitHub Actions (dans $DEPLOY_PATH).
-# IMAGE, APP_PORT et PROXY_NETWORK sont écrits dans .env par le workflow,
+# IMAGE et PROXY_NETWORK sont écrits dans .env par le workflow,
 # ex. IMAGE=docker.io/<user>/portfolio-konan:<sha>
 services:
   portfolio:
@@ -8,10 +8,10 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-    # Nginx (conteneur) joint le site via http://portfolio-konan:3000 sur le réseau partagé.
+    # Nginx (conteneur) joint le site via http://portfolio-konan:3898 sur le réseau partagé.
     # Le port local sert au healthcheck du workflow et au debug sur le VPS.
     ports:
-      - "127.0.0.1:${APP_PORT:-3898}:3000"
+      - "127.0.0.1:3898:3898"
     networks:
       - proxy
 

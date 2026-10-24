@@ -1,6 +1,6 @@
 # Déploiement — CI/CD GitHub Actions → VPS (Docker)
 
-Le portfolio est construit en image Docker, publié sur **Docker Hub** puis déployé sur un VPS avec Docker Compose, derrière Nginx (ou Traefik) en HTTPS. Le conteneur écoute sur le port **3898** du VPS (`127.0.0.1:3898` → `3000` dans le conteneur).
+Le portfolio est construit en image Docker, publié sur **Docker Hub** puis déployé sur un VPS avec Docker Compose, derrière Nginx (ou Traefik) en HTTPS. Le conteneur écoute sur le port **3898** du VPS (`127.0.0.1:3898`, et le conteneur écoute aussi sur 3898).
 
 ## Vue d'ensemble
 
@@ -15,7 +15,7 @@ git push main
 │ (aussi sur les PR) │   │            et :latest    │   │ healthcheck 127.0.0.1:3898│
 └────────────────────┘   └──────────────────────────┘   └───────────────────────────┘
                                                                      │
-                                         Internet ─▶ Nginx (conteneur, HTTPS) ─▶ portfolio-konan:3000
+                                         Internet ─▶ Nginx (conteneur, HTTPS) ─▶ portfolio-konan:3898
 ```
 
 
@@ -81,7 +81,7 @@ Le token Docker Hub sert à pousser l'image depuis GitHub Actions et à la tirer
 
 ### 4. Reverse proxy + HTTPS (Nginx en conteneur)
 
-Nginx tourne dans un conteneur Docker (comme pour `stock.vitrinedeco.com`). Il joint le portfolio **par son nom de conteneur** sur un réseau Docker partagé : `http://portfolio-konan:3000`. `127.0.0.1:3898` ne fonctionne pas depuis le conteneur Nginx (c'est son propre localhost).
+Nginx tourne dans un conteneur Docker (comme pour `stock.vitrinedeco.com`). Il joint le portfolio **par son nom de conteneur** sur un réseau Docker partagé : `http://portfolio-konan:3898`. `127.0.0.1:3898` ne fonctionne pas depuis le conteneur Nginx (c'est son propre localhost).
 
 **a. Trouver le réseau Docker de Nginx**
 
@@ -112,7 +112,7 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
 
     location / {
-        proxy_pass http://portfolio-konan:3000;
+        proxy_pass http://portfolio-konan:3898;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -184,7 +184,7 @@ docker compose -f /home/konan/apps/portfolio/docker-compose.yml logs -f
 
 ```bash
 docker build -t portfolio-konan .
-docker run --rm -p 3898:3000 portfolio-konan   # http://localhost:3898
+docker run --rm -p 3898:3898 portfolio-konan   # http://localhost:3898
 ```
 
 ## Dépannage
