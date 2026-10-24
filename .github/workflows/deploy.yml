@@ -31,6 +31,8 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
+      # LayoutProps / PageProps sont générés dans .next/types
+      - run: npx next typegen
       - run: npx tsc --noEmit
       - run: npm run build
         env:
