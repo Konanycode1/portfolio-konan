@@ -12,9 +12,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # vars.DOCKERHUB_USERNAME est une variable de dépôt (pas un secret) :
-  # un secret dans le nom d'image serait masqué et bloquerait la sortie du job.
-  IMAGE_NAME: docker.io/${{ vars.DOCKERHUB_USERNAME }}/portfolio-konan
+  # Accepté en variable OU en secret de dépôt. Le nom d'image n'est jamais passé
+  # en sortie de job (GitHub y supprime les valeurs issues de secrets) :
+  # chaque job le recalcule à partir du SHA.
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || secrets.DOCKERHUB_USERNAME }}
   APP_PORT: 3898
 
 jobs:
@@ -43,18 +44,15 @@ jobs:
     needs: ci
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.ref.outputs.image }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Check Docker Hub config
         env:
-          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           HAS_TOKEN: ${{ secrets.DOCKERHUB_TOKEN != '' }}
         run: |
           if [ -z "$DOCKERHUB_USERNAME" ]; then
-            echo "::error::Variable de dépôt DOCKERHUB_USERNAME manquante (Settings → Secrets and variables → Actions → onglet Variables)"
+            echo "::error::Variable de dépôt DOCKERHUB_USERNAME manquant (Settings → Secrets and variables → Actions)"
             exit 1
           fi
           if [ "$HAS_TOKEN" != "true" ]; then
@@ -63,14 +61,16 @@ jobs:
           fi
 
       - name: Image tag
-        id: ref
-        run: echo "image=${IMAGE_NAME}:${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+        run: |
+          name="docker.io/${DOCKERHUB_USERNAME,,}/portfolio-konan"
+          echo "IMAGE=$name:${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+          echo "IMAGE_LATEST=$name:latest" >> "$GITHUB_ENV"
 
       - uses: docker/setup-buildx-action@v3
 
       - uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - uses: docker/build-push-action@v6
@@ -78,8 +78,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ steps.ref.outputs.image }}
-            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE }}
+            ${{ env.IMAGE_LATEST }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -106,11 +106,12 @@ jobs:
           source: docker-compose.yml
           target: ${{ secrets.DEPLOY_PATH }}
 
+      - name: Image tag
+        run: echo "IMAGE=docker.io/${DOCKERHUB_USERNAME,,}/portfolio-konan:${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
       - name: Pull & restart
         uses: appleboy/ssh-action@v1.2.0
         env:
-          IMAGE: ${{ needs.image.outputs.image }}
-          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           APP_PORT: ${{ env.APP_PORT }}

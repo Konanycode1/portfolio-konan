@@ -18,23 +18,25 @@ git push main
                                          Internet ─▶ Nginx/Traefik (HTTPS) ─▶ 127.0.0.1:3898
 ```
 
-| Événement | Jobs exécutés |
-|---|---|
-| Pull request vers `main` | `ci` |
-| Push sur `main` | `ci` → `image` → `deploy` |
+
+| Événement                            | Jobs exécutés             |
+| -------------------------------------- | --------------------------- |
+| Pull request vers`main`                | `ci`                        |
+| Push sur`main`                         | `ci` → `image` → `deploy` |
 | Lancement manuel (`workflow_dispatch`) | `ci` → `image` → `deploy` |
 
 Un nouveau push annule le pipeline en cours sur la même branche. Le job `deploy` n'est jamais annulé en plein déploiement.
 
 ## Fichiers
 
-| Fichier | Rôle |
-|---|---|
-| `.github/workflows/deploy.yml` | Le pipeline |
-| `Dockerfile` | Build en 3 étapes (deps → builder → runner), Node 24 alpine, utilisateur non-root, healthcheck |
-| `docker-compose.yml` | Service lancé sur le VPS, exposé seulement sur `127.0.0.1:3898` |
-| `.dockerignore` | Exclut `node_modules`, `.next`, `.git`, `.env*` du contexte de build |
-| `next.config.ts` | `output: "standalone"` pour une image légère sans `node_modules` complet |
+
+| Fichier                        | Rôle                                                                                             |
+| ------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `.github/workflows/deploy.yml` | Le pipeline                                                                                       |
+| `Dockerfile`                   | Build en 3 étapes (deps → builder → runner), Node 24 alpine, utilisateur non-root, healthcheck |
+| `docker-compose.yml`           | Service lancé sur le VPS, exposé seulement sur`127.0.0.1:3898`                                  |
+| `.dockerignore`                | Exclut`node_modules`, `.next`, `.git`, `.env*` du contexte de build                               |
+| `next.config.ts`               | `output: "standalone"` pour une image légère sans `node_modules` complet                        |
 
 ## Mise en place (une seule fois)
 
@@ -63,24 +65,17 @@ ssh-keygen -t ed25519 -C "github-actions-portfolio" -f ~/.ssh/portfolio_deploy
 
 *Settings → Secrets and variables → Actions*
 
-Onglet **Variables** :
-
-| Variable | Exemple |
-|---|---|
-| `DOCKERHUB_USERNAME` | `konanycode1` (ton identifiant Docker Hub, en minuscules) |
-
-`DOCKERHUB_USERNAME` est une **variable** et non un secret : GitHub masque les secrets, et un nom d'image masqué ne peut pas être transmis du job `image` au job `deploy`.
-
 Onglet **Secrets** :
 
-| Secret | Exemple | Requis |
-|---|---|---|
-| `DOCKERHUB_TOKEN` | token Docker Hub Read & Write | oui |
-| `VPS_HOST` | `203.0.113.10` ou `vps.abrahamkonany.dev` | oui |
-| `VPS_USER` | `deploy` | oui |
-| `VPS_SSH_KEY` | clé privée ed25519 | oui |
-| `DEPLOY_PATH` | `/opt/portfolio` | oui |
-| `VPS_PORT` | `22` | non (22 par défaut) |
+
+| Secret            | Exemple                                   | Requis               |
+| ----------------- | ----------------------------------------- | -------------------- |
+| `DOCKERHUB_TOKEN` | token Docker Hub Read & Write             | oui                  |
+| `VPS_HOST`        | `203.0.113.10` ou `vps.abrahamkonany.dev` | oui                  |
+| `VPS_USER`        | `deploy`                                  | oui                  |
+| `VPS_SSH_KEY`     | clé privée ed25519                      | oui                  |
+| `DEPLOY_PATH`     | `/opt/portfolio`                          | oui                  |
+| `VPS_PORT`        | `22`                                      | non (22 par défaut) |
 
 Le token Docker Hub sert à pousser l'image depuis GitHub Actions et à la tirer depuis le VPS (indispensable si le dépôt Docker Hub est privé).
 
@@ -88,7 +83,7 @@ Le token Docker Hub sert à pousser l'image depuis GitHub Actions et à la tirer
 
 ```nginx
 server {
-    server_name abrahamkonany.dev;
+    server_name abrahamkonany.com;
 
     location / {
         proxy_pass http://127.0.0.1:3898;
@@ -156,12 +151,13 @@ docker run --rm -p 3898:3000 portfolio-konan   # http://localhost:3898
 
 ## Dépannage
 
-| Symptôme | Cause probable | Solution |
-|---|---|---|
-| `npm ci` échoue (« lock file not in sync ») | `package-lock.json` désynchronisé | `rm -rf node_modules package-lock.json && npm install`, commit du lock |
-| `denied` / `unauthorized` au push ou au pull | token Docker Hub invalide ou en lecture seule | régénérer un token **Read & Write**, mettre à jour `DOCKERHUB_TOKEN` |
-| `invalid reference format` | variable `DOCKERHUB_USERNAME` absente ou avec majuscules | la créer dans l'onglet *Variables*, en minuscules |
-| `address already in use` | le port 3898 est déjà pris sur le VPS | `sudo ss -ltnp \| grep 3898`, ou changer `APP_PORT` dans le workflow |
-| `permission denied ... docker.sock` | l'utilisateur SSH n'est pas dans le groupe `docker` | `sudo usermod -aG docker <user>` puis se reconnecter |
-| Healthcheck en échec | le conteneur crashe au démarrage | `docker compose logs --tail=100` sur le VPS |
-| 502 Bad Gateway | proxy OK mais conteneur arrêté | `docker compose ps`, puis `up -d` |
+
+| Symptôme                                      | Cause probable                                          | Solution                                                                |
+| ---------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `npm ci` échoue (« lock file not in sync ») | `package-lock.json` désynchronisé                     | `rm -rf node_modules package-lock.json && npm install`, commit du lock  |
+| `denied` / `unauthorized` au push ou au pull   | token Docker Hub invalide ou en lecture seule           | régénérer un token**Read & Write**, mettre à jour `DOCKERHUB_TOKEN` |
+| `invalid reference format`                     | variable`DOCKERHUB_USERNAME` absente ou avec majuscules | la créer dans l'onglet*Variables*, en minuscules                       |
+| `address already in use`                       | le port 3898 est déjà pris sur le VPS                 | `sudo ss -ltnp | grep 3898`, ou changer `APP_PORT` dans le workflow     |
+| `permission denied ... docker.sock`            | l'utilisateur SSH n'est pas dans le groupe`docker`      | `sudo usermod -aG docker <user>` puis se reconnecter                    |
+| Healthcheck en échec                          | le conteneur crashe au démarrage                       | `docker compose logs --tail=100` sur le VPS                             |
+| 502 Bad Gateway                                | proxy OK mais conteneur arrêté                        | `docker compose ps`, puis `up -d`                                       |
