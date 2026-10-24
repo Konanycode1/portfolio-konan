@@ -17,6 +17,8 @@ env:
   # chaque job le recalcule à partir du SHA.
   DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || secrets.DOCKERHUB_USERNAME }}
   APP_PORT: 3898
+  # Réseau Docker du conteneur Nginx (variable ou secret PROXY_NETWORK)
+  PROXY_NETWORK: ${{ vars.PROXY_NETWORK || secrets.PROXY_NETWORK || 'proxy' }}
 
 jobs:
   ci:
@@ -120,12 +122,12 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
-          envs: IMAGE,DOCKERHUB_USERNAME,DOCKERHUB_TOKEN,DEPLOY_PATH,APP_PORT
+          envs: IMAGE,DOCKERHUB_USERNAME,DOCKERHUB_TOKEN,DEPLOY_PATH,APP_PORT,PROXY_NETWORK
           script: |
             set -e
             cd "$DEPLOY_PATH"
             echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            printf 'IMAGE=%s\nAPP_PORT=%s\n' "$IMAGE" "$APP_PORT" > .env
+            printf 'IMAGE=%s\nAPP_PORT=%s\nPROXY_NETWORK=%s\n' "$IMAGE" "$APP_PORT" "$PROXY_NETWORK" > .env
             docker compose pull
             docker compose up -d --remove-orphans
             docker logout
