@@ -71,7 +71,7 @@ Onglet **Secrets** (*Repository secrets*, pas dans l'environnement `production`)
 | ----------------- | ----------------------------------------- | -------------------- |
 | `DOCKERHUB_USERNAME` | identifiant Docker Hub                 | oui                  |
 | `DOCKERHUB_TOKEN` | token Docker Hub Read & Write             | oui                  |
-| `VPS_HOST`        | `203.0.113.10` ou `vps.abrahamkonany.dev` | oui                  |
+| `VPS_HOST`        | `203.0.113.10` ou `vps.abrahamkonany.com` | oui                  |
 | `VPS_USER`        | `konan`                                   | oui                  |
 | `VPS_SSH_KEY`     | clé privée ed25519                      | oui                  |
 | `DEPLOY_PATH`     | `/home/konan/apps/portfolio`              | oui                  |

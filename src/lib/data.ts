@@ -6,7 +6,7 @@ export const profile = {
   email: "abrahamkonany@gmail.com",
   phone: "+225 01 41 82 29 18",
   phoneHref: "tel:+2250141822918",
-  website: "https://abrahamkonany.dev",
+  website: "https://abrahamkonany.com",
 };
 
 export const stats = [

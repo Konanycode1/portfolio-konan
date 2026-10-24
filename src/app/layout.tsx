@@ -20,7 +20,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://abrahamkonany.dev"),
+  metadataBase: new URL("https://abrahamkonany.com"),
   title: "Abraham Konan — Développeur Backend",
   description:
     "Développeur backend Node.js / NestJS / TypeScript. APIs, paiements, infrastructure Kubernetes et CI/CD pour des plateformes en production.",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "Abraham Konan — Développeur Backend",
     description:
       "APIs, paiements, infrastructure Kubernetes et CI/CD pour des plateformes en production.",
-    url: "https://abrahamkonany.dev",
+    url: "https://abrahamkonany.com",
     locale: "fr_FR",
     type: "website",
   },

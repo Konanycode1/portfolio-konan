@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://abrahamkonany.dev
+      url: https://abrahamkonany.com
     concurrency:
       group: deploy-production
       cancel-in-progress: false
