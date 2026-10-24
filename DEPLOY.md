@@ -45,7 +45,7 @@ Un nouveau push annule le pipeline en cours sur la même branche. Le job `deploy
 ```bash
 # Docker + plugin compose installés, puis :
 sudo usermod -aG docker $USER      # l'utilisateur SSH doit pouvoir lancer docker
-sudo mkdir -p /opt/portfolio && sudo chown $USER /opt/portfolio
+mkdir -p ~/apps/portfolio
 ```
 
 Clé SSH dédiée au déploiement :
@@ -65,16 +65,16 @@ ssh-keygen -t ed25519 -C "github-actions-portfolio" -f ~/.ssh/portfolio_deploy
 
 *Settings → Secrets and variables → Actions*
 
-Onglet **Secrets** :
-
+Onglet **Secrets** (*Repository secrets*, pas dans l'environnement `production`) :
 
 | Secret            | Exemple                                   | Requis               |
 | ----------------- | ----------------------------------------- | -------------------- |
+| `DOCKERHUB_USERNAME` | identifiant Docker Hub                 | oui                  |
 | `DOCKERHUB_TOKEN` | token Docker Hub Read & Write             | oui                  |
 | `VPS_HOST`        | `203.0.113.10` ou `vps.abrahamkonany.dev` | oui                  |
-| `VPS_USER`        | `deploy`                                  | oui                  |
+| `VPS_USER`        | `konan`                                   | oui                  |
 | `VPS_SSH_KEY`     | clé privée ed25519                      | oui                  |
-| `DEPLOY_PATH`     | `/opt/portfolio`                          | oui                  |
+| `DEPLOY_PATH`     | `/home/konan/apps/portfolio`              | oui                  |
 | `VPS_PORT`        | `22`                                      | non (22 par défaut) |
 
 Le token Docker Hub sert à pousser l'image depuis GitHub Actions et à la tirer depuis le VPS (indispensable si le dépôt Docker Hub est privé).
@@ -127,7 +127,7 @@ docker image prune -f
 **Rollback** vers une version précédente :
 
 ```bash
-cd /opt/portfolio
+cd /home/konan/apps/portfolio
 printf 'IMAGE=docker.io/<user>/portfolio-konan:<ancien-sha>\nAPP_PORT=3898\n' > .env
 docker compose up -d
 ```
@@ -139,7 +139,7 @@ Les tags `<sha>` disponibles sont listés dans l'onglet *Tags* du dépôt Docker
 **Logs** :
 
 ```bash
-docker compose -f /opt/portfolio/docker-compose.yml logs -f
+docker compose -f /home/konan/apps/portfolio/docker-compose.yml logs -f
 ```
 
 **Tester l'image en local** :
@@ -156,7 +156,7 @@ docker run --rm -p 3898:3000 portfolio-konan   # http://localhost:3898
 | ---------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `npm ci` échoue (« lock file not in sync ») | `package-lock.json` désynchronisé                     | `rm -rf node_modules package-lock.json && npm install`, commit du lock  |
 | `denied` / `unauthorized` au push ou au pull   | token Docker Hub invalide ou en lecture seule           | régénérer un token**Read & Write**, mettre à jour `DOCKERHUB_TOKEN` |
-| `invalid reference format`                     | variable`DOCKERHUB_USERNAME` absente ou avec majuscules | la créer dans l'onglet*Variables*, en minuscules                       |
+| `DOCKERHUB_USERNAME manquant`                  | secret absent ou créé dans l'environnement `production` | le créer dans *Repository secrets* (une variable de dépôt marche aussi) |
 | `address already in use`                       | le port 3898 est déjà pris sur le VPS                 | `sudo ss -ltnp | grep 3898`, ou changer `APP_PORT` dans le workflow     |
 | `permission denied ... docker.sock`            | l'utilisateur SSH n'est pas dans le groupe`docker`      | `sudo usermod -aG docker <user>` puis se reconnecter                    |
 | Healthcheck en échec                          | le conteneur crashe au démarrage                       | `docker compose logs --tail=100` sur le VPS                             |
